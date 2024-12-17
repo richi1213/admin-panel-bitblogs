@@ -1,28 +1,48 @@
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, MenuProps, theme } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
 
-const { Header, Sider, Content } = Layout;
+const { Content, Sider } = Layout;
+
+const items2: MenuProps['items'] = [
+  {
+    key: `users`,
+    label: `Users`,
+    children: [
+      {
+        key: 0,
+        label: <Link to='test'>Users</Link>,
+      },
+    ],
+  },
+];
 
 export const DashboardLayout: React.FC = () => {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+
   return (
-    <Layout className='min-h-screen'>
-      <Sider>
-        <Menu theme='dark' mode='inline'>
-          <Menu.Item key='users'>
-            <Link to='/dashboard/users'>Users</Link>
-          </Menu.Item>
-          <Menu.Item key='blogs'>
-            <Link to='/dashboard/blogs'>Blogs</Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Layout>
-        <Header className='bg-slate-200 text-center'>Admin Panel</Header>
-        <Content className='bg- m-4 bg-slate-200 p-4'>
+    <Layout style={{ background: colorBgContainer }}>
+      <Layout
+        style={{
+          padding: '24px 0',
+          background: colorBgContainer,
+          borderRadius: borderRadiusLG,
+        }}
+      >
+        <Sider style={{ background: colorBgContainer }} width={200}>
+          <Menu
+            mode='inline'
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
+            style={{ height: '100%' }}
+            items={items2}
+          />
+        </Sider>
+        <Content style={{ padding: '0 24px', minHeight: '80vh' }}>
           <Outlet />
         </Content>
       </Layout>
     </Layout>
   );
 };
-Layout;

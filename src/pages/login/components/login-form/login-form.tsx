@@ -24,8 +24,7 @@ export function LoginForm() {
     <Card
       title={
         <div className='flex flex-col items-center text-center'>
-          <h2 className='text-2xl'>Login to BB</h2>
-          <p>Enter your info to login</p>
+          <h2 className='text-2xl'>Login to BitBlogs</h2>
         </div>
       }
       className='text-card-foreground mx-auto w-full max-w-md'

@@ -1,2 +1,3 @@
-export * from './auth/auth-layout';
-export * from './dashboard/dashboard-layout';
+export * from './default';
+export * from './auth';
+export * from './dashboard';

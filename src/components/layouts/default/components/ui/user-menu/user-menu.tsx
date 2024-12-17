@@ -1,5 +1,5 @@
 import useLogOut from '@/atoms/profile/hooks/use-log-out';
-import { Button, Dropdown, Menu } from 'antd';
+import { Button, Dropdown } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { ProfileAvatarProps } from '@/components/layouts/default/components/ui/user-menu/types';
 import { ProfileAvatar } from '@/components/layouts/default/components/ui/user-menu/profile-avatar';

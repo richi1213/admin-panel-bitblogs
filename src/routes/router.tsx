@@ -8,8 +8,7 @@ import {
   AuthLayout,
   DashboardLayout,
 } from '../components/layouts';
-import { LoginPage } from '@/pages/login';
-import { NotFound } from '@/pages';
+import { LoginPage, UsersPage, NotFound } from '@/pages';
 import { IsUnauthorizedGuard, IsAuthorizedGuard } from '@/routes/protected';
 
 export const router = createBrowserRouter(
@@ -23,7 +22,9 @@ export const router = createBrowserRouter(
         </Route>
 
         <Route element={<IsUnauthorizedGuard />}>
-          <Route path='/dashboard' element={<DashboardLayout />} />
+          <Route path='dashboard' element={<DashboardLayout />}>
+            <Route path='users' element={<UsersPage />}></Route>
+          </Route>
         </Route>
       </Route>
 

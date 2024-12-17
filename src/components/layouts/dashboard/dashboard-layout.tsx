@@ -1,20 +1,7 @@
-import { Layout, Menu, MenuProps, theme } from 'antd';
+import { Layout, Menu, theme } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
 
 const { Content, Sider } = Layout;
-
-const items2: MenuProps['items'] = [
-  {
-    key: `users`,
-    label: `Users`,
-    children: [
-      {
-        key: 0,
-        label: <Link to='test'>Users</Link>,
-      },
-    ],
-  },
-];
 
 export const DashboardLayout: React.FC = () => {
   const {
@@ -36,7 +23,18 @@ export const DashboardLayout: React.FC = () => {
             defaultSelectedKeys={['1']}
             defaultOpenKeys={['sub1']}
             style={{ height: '100%' }}
-            items={items2}
+            items={[
+              {
+                key: 'users',
+                label: 'Users',
+                children: [
+                  {
+                    key: '0',
+                    label: <Link to='test'>Users</Link>,
+                  },
+                ],
+              },
+            ]}
           />
         </Sider>
         <Content style={{ padding: '0 24px', minHeight: '80vh' }}>

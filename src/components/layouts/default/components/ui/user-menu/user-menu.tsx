@@ -7,21 +7,25 @@ import { ProfileAvatar } from '@/components/layouts/default/components/ui/user-m
 export const UserMenu: React.FC<ProfileAvatarProps> = ({ avatarUrl, name }) => {
   const { logout } = useLogOut();
 
-  // Define the menu
-  const menu = (
-    <Menu>
-      <Menu.Item key='signout' className='text-red-600' onClick={logout}>
-        <LogoutOutlined className='mr-2 h-4 w-4' />
-        Sign out
-      </Menu.Item>
-    </Menu>
-  );
+  const menuItems = [
+    {
+      key: 'signout',
+      label: (
+        <>
+          <LogoutOutlined className='mr-2 h-4 w-4' />
+          Sign out
+        </>
+      ),
+      className: 'text-red-600',
+      onClick: logout,
+    },
+  ];
 
   return (
     <Dropdown
       trigger={['click']}
       placement='bottomRight'
-      dropdownRender={() => menu}
+      menu={{ items: menuItems }}
     >
       <Button className='relative h-8 w-8 rounded-full'>
         <ProfileAvatar avatarUrl={avatarUrl} name={name} />

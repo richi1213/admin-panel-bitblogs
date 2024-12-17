@@ -1,5 +1,4 @@
-const App: React.FC = () => {
-  return <div></div>;
-};
+import { RouterProvider } from 'react-router-dom';
+import { router } from './routes';
 
-export default App;
+export const App: React.FC = () => <RouterProvider router={router} />;

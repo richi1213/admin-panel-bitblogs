@@ -1,0 +1,89 @@
+import { notification } from 'antd';
+import { useSetAtom } from 'jotai';
+import { userAtom } from '@/atoms/auth';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { fetchUserProfile } from '../../../../../supabase/api/profiles/profiles';
+import { supabase } from '../../../../../supabase';
+
+type UseLoginHandlers = {
+  handleLoginSuccess: () => Promise<void>;
+  handleLoginError: (err: unknown) => void;
+};
+
+const useLoginHandlers: () => UseLoginHandlers = () => {
+  const location = useLocation();
+  const redirectPath = location?.state?.from || '/';
+
+  const setUser = useSetAtom(userAtom);
+  const navigate = useNavigate();
+
+  const handleLoginSuccess: UseLoginHandlers['handleLoginSuccess'] =
+    async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (user) {
+          const profile = await fetchUserProfile(user.id);
+
+          if (!profile) {
+            notification.error({
+              message: 'Error',
+              description: 'Could not fetch user profile.',
+              duration: 2,
+            });
+            return;
+          }
+
+          setUser({
+            isLoggedIn: true,
+            userInfo: {
+              email: user.email ?? null,
+              username: profile.username || null,
+              avatar_url: profile.avatar_url || null,
+              full_name_en: profile.full_name_en || null,
+              full_name_ka: profile.full_name_ka || null,
+              id: profile.id,
+              updated_at: profile.updated_at || null,
+            },
+          });
+
+          notification.success({
+            message: 'Success!',
+            description: 'You have logged in successfully.',
+            duration: 2,
+          });
+
+          navigate(redirectPath, { replace: true });
+        }
+      } catch (err) {
+        console.error('Error handling login:', err);
+        notification.error({
+          message: 'Error',
+          description: 'An error occurred while logging in.',
+          duration: 2,
+        });
+      }
+    };
+
+  const handleLoginError: UseLoginHandlers['handleLoginError'] = (err) => {
+    const errorMessage =
+      (err as { message?: string })?.message || 'An unknown error occurred';
+    notification.error({
+      message: 'Uh oh! Something went wrong.',
+      description: (
+        <div className='flex items-center'>
+          <ExclamationCircleOutlined className='mr-2' />
+          <div>{errorMessage}</div>
+        </div>
+      ),
+      duration: 2,
+    });
+  };
+
+  return { handleLoginSuccess, handleLoginError };
+};
+
+export default useLoginHandlers;

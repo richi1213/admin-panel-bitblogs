@@ -1,10 +1,9 @@
 import { notification } from 'antd';
 import { useSetAtom } from 'jotai';
-import { userAtom } from '@/atoms/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { fetchUserProfile } from '../../../../../supabase/api/profiles/profiles';
-import { supabase } from '../../../../../supabase';
+import { userAtom } from '@/atoms';
+import { fetchUserProfile, supabase } from '@/supabase';
 
 type UseLoginHandlers = {
   handleLoginSuccess: () => Promise<void>;
@@ -27,6 +26,7 @@ const useLoginHandlers: () => UseLoginHandlers = () => {
 
         if (user) {
           const profile = await fetchUserProfile(user.id);
+          console.log('Logged in user', user);
 
           if (!profile) {
             notification.error({

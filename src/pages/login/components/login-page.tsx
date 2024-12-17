@@ -1,9 +1,11 @@
-import { LoginForm } from './login-form';
+import { LoginForm } from '@/pages/login/components/login-form';
 
-export const Login: React.FC = () => {
+const Login: React.FC = () => {
   return (
     <div className='flex min-h-[80vh] items-center justify-center'>
       <LoginForm />
     </div>
   );
 };
+
+export default Login;

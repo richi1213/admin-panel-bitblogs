@@ -1,1 +1,2 @@
-export * from './views/login-view';
+export * from './components';
+export * from './views';

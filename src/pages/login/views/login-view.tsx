@@ -6,7 +6,7 @@ const LazyLoginPage = lazy(() => import('../components/login-page'));
 export const LoginPage: React.FC = () => {
   return (
     <>
-      <Suspense fallback={<Spin tip='Loading...' />}>
+      <Suspense fallback={<Spin />}>
         <LazyLoginPage />
       </Suspense>
     </>

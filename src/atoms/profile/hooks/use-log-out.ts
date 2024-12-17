@@ -1,8 +1,8 @@
 import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { notification } from 'antd';
-import { userAtom } from '../user-atom';
-import { supabase } from '../../../supabase';
+import { userAtom } from '@/atoms/profile/user-atom';
+import { supabase } from '@/supabase';
 
 const useLogOut: () => { logout: () => Promise<void> } = () => {
   const setUser = useSetAtom(userAtom);

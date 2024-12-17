@@ -1,5 +1,5 @@
+import { ProfilesRow } from '@/supabase';
 import { atomWithStorage } from 'jotai/utils';
-import { ProfilesRow } from '../../supabase';
 
 export const userAtom = atomWithStorage<{
   isLoading?: boolean;

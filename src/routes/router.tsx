@@ -10,16 +10,21 @@ import {
 } from '../components/layouts';
 import { LoginPage } from '@/pages/login';
 import { NotFound } from '@/pages';
+import { IsUnauthorizedGuard, IsAuthorizedGuard } from '@/routes/protected';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/' element={<DefaultLayout />}>
-        <Route path='/' element={<AuthLayout />}>
-          <Route index element={<LoginPage />} />
+        <Route element={<IsAuthorizedGuard />}>
+          <Route path='/' element={<AuthLayout />}>
+            <Route index element={<LoginPage />} />
+          </Route>
         </Route>
 
-        <Route path='/dashboard' element={<DashboardLayout />}></Route>
+        <Route element={<IsUnauthorizedGuard />}>
+          <Route path='/dashboard' element={<DashboardLayout />} />
+        </Route>
       </Route>
 
       <Route path='*' element={<NotFound />} />

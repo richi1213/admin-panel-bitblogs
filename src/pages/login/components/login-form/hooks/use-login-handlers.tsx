@@ -1,6 +1,6 @@
 import { notification } from 'antd';
 import { useSetAtom } from 'jotai';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { userAtom } from '@/atoms';
 import { fetchUserProfile, supabase } from '@/supabase';
@@ -11,9 +11,6 @@ type UseLoginHandlers = {
 };
 
 const useLoginHandlers: () => UseLoginHandlers = () => {
-  const location = useLocation();
-  const redirectPath = location?.state?.from || '/';
-
   const setUser = useSetAtom(userAtom);
   const navigate = useNavigate();
 
@@ -26,7 +23,8 @@ const useLoginHandlers: () => UseLoginHandlers = () => {
 
         if (user) {
           const profile = await fetchUserProfile(user.id);
-          console.log('Logged in user', user);
+
+          console.log('Logged in user:', user);
 
           if (!profile) {
             notification.error({
@@ -56,7 +54,7 @@ const useLoginHandlers: () => UseLoginHandlers = () => {
             duration: 2,
           });
 
-          navigate(redirectPath, { replace: true });
+          navigate('/dashboard');
         }
       } catch (err) {
         console.error('Error handling login:', err);

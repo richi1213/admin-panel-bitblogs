@@ -30,7 +30,7 @@ export const DashboardLayout: React.FC = () => {
                 children: [
                   {
                     key: '0',
-                    label: <Link to='users'>Users</Link>,
+                    label: <Link to='/'>Users</Link>,
                   },
                 ],
               },

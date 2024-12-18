@@ -11,7 +11,8 @@ const { Column } = Table;
 
 export const UsersChart: React.FC = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [currentUser, setCurrentUser] = useState<UserInChart | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
   const {
     data: users,
     isLoading,
@@ -22,7 +23,7 @@ export const UsersChart: React.FC = () => {
     staleTime: 10 * 60 * 1000,
   });
 
-  const formattedUsers: UserInChart[] =
+  const formattedUsers =
     users?.map((user) => ({
       id: user.id,
       createdAt: formatDate(user.created_at),
@@ -40,28 +41,14 @@ export const UsersChart: React.FC = () => {
     return <Alert message='Error fetching users' type='error' />;
   }
 
-  const handleEdit = (user: UserInChart) => {
-    setCurrentUser(user);
+  const handleEdit = (userId: string) => {
+    setCurrentUserId(userId);
     setDrawerVisible(true);
   };
 
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
-    setCurrentUser(null);
-  };
-
-  const handleDelete = () => {
-    if (currentUser) {
-      console.log(`Deleting user with ID: ${currentUser.id}`);
-      handleCloseDrawer();
-    }
-  };
-
-  const handleBan = () => {
-    if (currentUser) {
-      console.log(`Banning user with ID: ${currentUser.id}`);
-      handleCloseDrawer();
-    }
+    setCurrentUserId(null);
   };
 
   return (
@@ -108,17 +95,15 @@ export const UsersChart: React.FC = () => {
           title='Actions'
           key='actions'
           render={(_, record) => (
-            <EditOutlined onClick={() => handleEdit(record)} />
+            <EditOutlined onClick={() => handleEdit(record.id)} />
           )}
         />
       </Table>
 
       <UserDrawer
         open={drawerVisible}
-        currentUser={currentUser}
+        userId={currentUserId as string}
         onClose={handleCloseDrawer}
-        onDelete={handleDelete}
-        onBan={handleBan}
       />
     </>
   );

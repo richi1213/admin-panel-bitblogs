@@ -1,9 +1,5 @@
-import { UserInChart } from '@/pages/users/components/chart/types';
-
 export type UserDrawerProps = {
   open: boolean;
-  currentUser: UserInChart | null;
+  userId: string;
   onClose: () => void;
-  onDelete: () => void;
-  onBan: () => void;
 };

@@ -23,7 +23,7 @@ export const router = createBrowserRouter(
 
         <Route element={<IsUnauthorizedGuard />}>
           <Route path='dashboard' element={<DashboardLayout />}>
-            <Route path='users' element={<UsersPage />}></Route>
+            <Route index element={<UsersPage />}></Route>
           </Route>
         </Route>
       </Route>

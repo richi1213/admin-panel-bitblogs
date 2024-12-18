@@ -54,14 +54,7 @@ export type User = {
   is_anonymous: boolean;
 };
 
-export type UpdateEmailPayload = {
+export type UpdateFieldPayload = {
   userId: string;
-  newEmail: string;
+  newField: string;
 };
-
-// export type UpdateEmailResponse = {
-//   data: {
-//     user: User | null;
-//   };
-//   error: string | null;
-// };

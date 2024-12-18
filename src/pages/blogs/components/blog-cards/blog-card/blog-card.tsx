@@ -34,6 +34,8 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
     enabled: !!(tag_ids && tag_ids.length > 0),
   });
 
+  console.log(tags);
+
   if (isAuthorLoading || areTagsLoading) {
     return <Skeleton active />;
   }
@@ -53,13 +55,13 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
         title={
           <Title
             level={3}
-            className='hover:text-primary text-2xl font-bold tracking-tight'
+            className='text-2xl font-bold tracking-tight hover:text-blue-500'
           >
             {title_en}
           </Title>
         }
         description={
-          <div className='text-muted-foreground flex items-center gap-4 text-sm'>
+          <div className='flex items-center gap-4 text-sm text-gray-500'>
             <Space>
               <UserOutlined />
               <span className='hover:underline'>{authorName}</span>
@@ -69,16 +71,13 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
           </div>
         }
       />
-      <Paragraph className='text-muted-foreground mt-4'>
+      <Paragraph className='mt-4 text-gray-500'>
         {description_en || 'No description available'}
       </Paragraph>
       <div className='mt-4 flex flex-wrap gap-2'>
         {tags?.map((tag) => (
-          <Tag
-            key={tag.id}
-            color='secondary'
-            className='bg-secondary text-accent-foreground cursor-pointer'
-          >
+          <Tag key={tag.id} color='blue' className='bg-blue-400 text-white'>
+            <img></img>
             {tag.name}
           </Tag>
         ))}

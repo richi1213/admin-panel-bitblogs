@@ -1,5 +1,11 @@
+import { BlogCardsWrapper } from '@/pages/blogs/components/blog-cards';
+
 const BlogsPage: React.FC = () => {
-  return <div>BlogsPage</div>;
+  return (
+    <>
+      <BlogCardsWrapper />
+    </>
+  );
 };
 
 export default BlogsPage;

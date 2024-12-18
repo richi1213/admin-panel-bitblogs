@@ -1,3 +1,4 @@
+import { BlogProvider, TagProvider } from '@/context';
 import { Layout, Menu, theme } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
 
@@ -50,7 +51,11 @@ export const DashboardLayout: React.FC = () => {
           />
         </Sider>
         <Content style={{ padding: '0 24px', minHeight: '80vh' }}>
-          <Outlet />
+          <BlogProvider>
+            <TagProvider>
+              <Outlet />
+            </TagProvider>
+          </BlogProvider>
         </Content>
       </Layout>
     </Layout>

@@ -1,4 +1,8 @@
-import { UpdateFieldPayload, User } from '@/supabase/api/users/types';
+import {
+  CreateUserPayload,
+  UpdateFieldPayload,
+  User,
+} from '@/supabase/api/users/types';
 import { supabase } from '@/supabase/auth-client';
 
 export const fetchAllUsers = async (): Promise<User[] | null> => {
@@ -100,4 +104,35 @@ export const deleteUser = async (userId: string): Promise<void> => {
   }
 
   console.log(`User with ID ${userId} deleted successfully`);
+};
+
+export const createUser = async ({
+  email,
+  password,
+  fullNameEn,
+  fullNameKa,
+  username,
+}: CreateUserPayload): Promise<User | null> => {
+  const { data, error } = await supabase.auth.admin.createUser({
+    email,
+    password,
+    user_metadata: {
+      full_name_en: fullNameEn,
+      full_name_ka: fullNameKa,
+      username: username,
+    },
+  });
+
+  if (error) {
+    console.error('Error creating user:', error.message);
+    throw new Error('Failed to create user');
+  }
+
+  const user = data?.user;
+
+  if (!user) {
+    return null;
+  }
+
+  return user as User;
 };

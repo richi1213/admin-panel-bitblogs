@@ -20,8 +20,6 @@ export const DashboardLayout: React.FC = () => {
         <Sider style={{ background: colorBgContainer }} width={200}>
           <Menu
             mode='inline'
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
             style={{ height: '100%' }}
             items={[
               {
@@ -31,6 +29,10 @@ export const DashboardLayout: React.FC = () => {
                   {
                     key: '0',
                     label: <Link to='/'>Users</Link>,
+                  },
+                  {
+                    key: '1',
+                    label: <Link to='create-user'>Create User</Link>,
                   },
                 ],
               },

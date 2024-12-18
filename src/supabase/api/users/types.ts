@@ -58,3 +58,11 @@ export type UpdateFieldPayload = {
   userId: string;
   newField: string;
 };
+
+export type CreateUserPayload = {
+  email: string;
+  password: string;
+  fullNameEn: string;
+  fullNameKa: string;
+  username: string;
+};

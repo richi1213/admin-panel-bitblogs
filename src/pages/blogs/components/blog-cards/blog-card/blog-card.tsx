@@ -77,7 +77,6 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
       <div className='mt-4 flex flex-wrap gap-2'>
         {tags?.map((tag) => (
           <Tag key={tag.id} color='blue' className='bg-blue-400 text-white'>
-            <img></img>
             {tag.name}
           </Tag>
         ))}

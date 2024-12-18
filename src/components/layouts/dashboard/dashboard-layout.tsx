@@ -45,6 +45,10 @@ export const DashboardLayout: React.FC = () => {
                     key: 'blogs-0',
                     label: <Link to='blogs'>Blogs</Link>,
                   },
+                  {
+                    key: 'blogs-1',
+                    label: <Link to='create-blog'>Create Blog</Link>,
+                  },
                 ],
               },
             ]}

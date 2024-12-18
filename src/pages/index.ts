@@ -3,3 +3,4 @@ export * from './login';
 export * from './users';
 export * from './create-user';
 export * from './blogs';
+export * from './create-blog';

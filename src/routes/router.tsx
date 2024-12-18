@@ -14,6 +14,7 @@ import {
   CreateUserPage,
   BlogsPage,
   NotFound,
+  CreateBlogPage,
 } from '@/pages';
 import { IsUnauthorizedGuard, IsAuthorizedGuard } from '@/routes/protected';
 
@@ -32,6 +33,7 @@ export const router = createBrowserRouter(
             <Route index element={<UsersPage />}></Route>
             <Route path='create-user' element={<CreateUserPage />}></Route>
             <Route path='blogs' element={<BlogsPage />}></Route>
+            <Route path='create-blog' element={<CreateBlogPage />}></Route>
           </Route>
         </Route>
       </Route>

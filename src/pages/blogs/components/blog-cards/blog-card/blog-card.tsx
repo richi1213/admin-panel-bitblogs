@@ -1,13 +1,5 @@
-import React from 'react';
-import {
-  Card,
-  Typography,
-  Tag,
-  Space,
-  Skeleton,
-  Dropdown,
-  notification,
-} from 'antd';
+import React, { useState } from 'react';
+import { Card, Typography, Tag, Space, Dropdown, Spin } from 'antd';
 import {
   UserOutlined,
   EllipsisOutlined,
@@ -16,14 +8,13 @@ import {
 } from '@ant-design/icons';
 import { BlogCardProps } from '@/pages/blogs/components/blog-cards/blog-card/types';
 import { formatDate } from '@/utils';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchTagsByIds, fetchUserProfile, deleteBlog } from '@/supabase';
+import EditBlogModal from '@/pages/blogs/components/blog-cards/blog-card/modal/edit-blog-modal';
+import { useBlogData, useDeleteBlog, useUpdateBlog } from '@/pages/blogs/hooks';
 
 const { Title, Paragraph } = Typography;
 
 export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
-  const queryClient = useQueryClient();
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { title_en, created_at, image_url, description_en, user_id, tag_ids } =
     blog;
 
@@ -31,52 +22,37 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
     ? `${import.meta.env.VITE_SUPABASE_BLOG_IMAGES_STORAGE_URL}/${image_url}`
     : '';
 
-  const formattedDate = formatDate(created_at);
-
-  const { data: authorProfile, isLoading: isAuthorLoading } = useQuery({
-    queryKey: ['userProfile', user_id],
-    queryFn: () => fetchUserProfile(user_id as string),
-    enabled: !!user_id,
-  });
-
-  const { data: tags, isLoading: areTagsLoading } = useQuery({
-    queryKey: ['tags', tag_ids],
-    queryFn: () => fetchTagsByIds(tag_ids || []),
-    enabled: !!(tag_ids && tag_ids.length > 0),
-  });
-
-  const { mutate: deleteBlogById } = useMutation({
-    mutationKey: ['blogs'],
-    mutationFn: (id: number) => deleteBlog(id),
-    onSuccess: () => {
-      notification.success({
-        message: 'Blog deleted successfully!',
-        duration: 2,
-      });
-
-      queryClient.invalidateQueries({ queryKey: ['blogs'] });
-    },
-    onError: () => {
-      notification.error({
-        message: 'Error deleting blog',
-        description: 'An error occurred while deleting the blog',
-        duration: 2,
-      });
-    },
-  });
+  const { authorProfile, tags, isAuthorLoading, areTagsLoading } = useBlogData(
+    user_id as string,
+    tag_ids as number[],
+  );
+  const { deleteBlogById } = useDeleteBlog();
+  const { updateBlogById } = useUpdateBlog();
 
   if (isAuthorLoading || areTagsLoading) {
-    return <Skeleton active />;
+    return <Spin />;
   }
 
   const authorName = authorProfile?.full_name_en || 'Unknown Author';
+  const formattedDate = formatDate(created_at);
 
   const handleMenuClick = (e: { key: string }) => {
     if (e.key === 'edit') {
-      console.log('Edit blog with id:', blog.id);
+      setIsModalVisible(true);
     } else if (e.key === 'delete') {
       deleteBlogById(blog.id);
     }
+  };
+
+  const handleUpdateBlog = (
+    newTitle: string | null,
+    newDescription: string | null,
+  ) => {
+    updateBlogById({
+      id: blog.id,
+      title_en: newTitle || '',
+      description_en: newDescription || '',
+    });
   };
 
   const items = [
@@ -141,6 +117,14 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
           </Tag>
         ))}
       </div>
+
+      <EditBlogModal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        onSave={handleUpdateBlog}
+        title={title_en}
+        description={description_en}
+      />
     </Card>
   );
 };

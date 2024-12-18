@@ -69,3 +69,35 @@ export const searchBlogs = async (
     return null;
   }
 };
+
+export const deleteBlog = async (blogId: number): Promise<void> => {
+  const { error } = await supabase
+    .from('blogs')
+    .delete()
+    .eq('id', blogId)
+    .throwOnError();
+
+  if (error) {
+    console.error('Error deleting blog:', error.message);
+    throw error;
+  }
+};
+
+export const updateBlog = async (
+  blogId: number,
+  title_en: string | null,
+  description_en: string | null,
+): Promise<BlogRow | null> => {
+  const { data, error } = await supabase
+    .from('blogs')
+    .update({ title_en, description_en })
+    .eq('id', blogId)
+    .throwOnError();
+
+  if (error) {
+    console.error('Error updating blog:', error.message);
+    throw error;
+  }
+
+  return data;
+};

@@ -1,17 +1,28 @@
 import React from 'react';
-import { Card, Typography, Tag, Space, Skeleton } from 'antd';
-import { UserOutlined, EllipsisOutlined } from '@ant-design/icons';
+import {
+  Card,
+  Typography,
+  Tag,
+  Space,
+  Skeleton,
+  Dropdown,
+  notification,
+} from 'antd';
+import {
+  UserOutlined,
+  EllipsisOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
 import { BlogCardProps } from '@/pages/blogs/components/blog-cards/blog-card/types';
 import { formatDate } from '@/utils';
-import { useQuery } from '@tanstack/react-query';
-import { fetchTagsByIds, fetchUserProfile } from '@/supabase';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchTagsByIds, fetchUserProfile, deleteBlog } from '@/supabase';
 
 const { Title, Paragraph } = Typography;
 
 export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
-  if (!blog) {
-    return <div>No blog data available</div>;
-  }
+  const queryClient = useQueryClient();
 
   const { title_en, created_at, image_url, description_en, user_id, tag_ids } =
     blog;
@@ -34,13 +45,53 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
     enabled: !!(tag_ids && tag_ids.length > 0),
   });
 
-  console.log(tags);
+  const { mutate: deleteBlogById } = useMutation({
+    mutationKey: ['blogs'],
+    mutationFn: (id: number) => deleteBlog(id),
+    onSuccess: () => {
+      notification.success({
+        message: 'Blog deleted successfully!',
+        duration: 2,
+      });
+
+      queryClient.invalidateQueries({ queryKey: ['blogs'] });
+    },
+    onError: () => {
+      notification.error({
+        message: 'Error deleting blog',
+        description: 'An error occurred while deleting the blog',
+        duration: 2,
+      });
+    },
+  });
 
   if (isAuthorLoading || areTagsLoading) {
     return <Skeleton active />;
   }
 
   const authorName = authorProfile?.full_name_en || 'Unknown Author';
+
+  const handleMenuClick = (e: { key: string }) => {
+    if (e.key === 'edit') {
+      console.log('Edit blog with id:', blog.id);
+    } else if (e.key === 'delete') {
+      deleteBlogById(blog.id);
+    }
+  };
+
+  const items = [
+    {
+      label: 'Edit',
+      key: 'edit',
+      icon: <EditOutlined />,
+    },
+    {
+      label: 'Delete',
+      key: 'delete',
+      icon: <DeleteOutlined />,
+      danger: true,
+    },
+  ];
 
   return (
     <Card className='overflow-hidden p-4 transition-all hover:shadow-lg'>
@@ -71,6 +122,15 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
           </div>
         }
       />
+
+      <Dropdown
+        menu={{ items, onClick: handleMenuClick }}
+        trigger={['click']}
+        className='absolute right-2 top-2'
+      >
+        <EllipsisOutlined style={{ fontSize: '18px', cursor: 'pointer' }} />
+      </Dropdown>
+
       <Paragraph className='mt-4 text-gray-500'>
         {description_en || 'No description available'}
       </Paragraph>

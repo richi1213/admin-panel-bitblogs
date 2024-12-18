@@ -6,6 +6,7 @@ import {
   updateUserFullNameEn,
   updateUserFullNameKa,
   updateUserUsername,
+  deleteUser,
 } from '@/supabase';
 
 export const useUserData = (userId: string) => {
@@ -100,6 +101,26 @@ export const useUserData = (userId: string) => {
     },
   });
 
+  const { mutate: deleteUserById } = useMutation({
+    mutationKey: ['deleteUser', userId],
+    mutationFn: () => deleteUser(userId),
+    onSuccess: () => {
+      notification.success({
+        message: 'User deleted successfully!',
+        duration: 2,
+      });
+
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+    onError: () => {
+      notification.error({
+        message: 'Error deleting user',
+        description: 'An error occurred while deleting the user',
+        duration: 2,
+      });
+    },
+  });
+
   return {
     user,
     isLoading,
@@ -107,5 +128,6 @@ export const useUserData = (userId: string) => {
     updateFullNameEn,
     updateFullNameKa,
     updateUsername,
+    deleteUserById,
   };
 };

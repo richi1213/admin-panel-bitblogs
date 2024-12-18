@@ -1,6 +1,6 @@
 import React from 'react';
 import { Drawer, Button, Form, Input, Space, Spin } from 'antd';
-import { DeleteOutlined, StopOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import { EditableFormField } from '@/pages/users/components/chart/drawer/forms';
 import { UserDrawerProps } from '@/pages/users/components/chart/drawer/types';
 import { useUserData } from '@/pages/users/hooks';
@@ -17,6 +17,7 @@ export const UserDrawer: React.FC<UserDrawerProps> = ({
     updateFullNameEn,
     updateFullNameKa,
     updateUsername,
+    deleteUserById,
   } = useUserData(userId);
 
   const initialValues = {
@@ -92,18 +93,18 @@ export const UserDrawer: React.FC<UserDrawerProps> = ({
           type='primary'
           danger
           icon={<DeleteOutlined />}
-          onClick={() => console.log('Delete User')}
+          onClick={() => deleteUserById()}
         >
           Delete User
         </Button>
-        <Button
+        {/* <Button
           type='primary'
           danger
           icon={<StopOutlined />}
           onClick={() => console.log('Ban User')}
         >
           Ban User
-        </Button>
+        </Button> */}
       </Space>
     </Drawer>
   );

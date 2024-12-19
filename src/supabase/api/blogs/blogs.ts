@@ -1,13 +1,21 @@
 import { BlogRow, BlogsInsertPayload } from '@/supabase/api/blogs/types';
 import { supabase } from '@/supabase/auth-client';
 
-export const uploadImage = async (imageFile: File | undefined) => {
+export const uploadImage = async (
+  imageFile: File | undefined,
+): Promise<string> => {
   if (!imageFile) throw new Error('Image file is required');
+
+  // Replace spaces with underscores to sanitize the file name
+  const sanitizedFileName = imageFile.name.replace(/\s+/g, '_');
+
   const { data, error } = await supabase.storage
     .from('blog_images')
-    .upload(imageFile.name, imageFile);
-  if (error) throw error;
-  return data?.fullPath;
+    .upload(sanitizedFileName, imageFile);
+
+  if (error) throw new Error(`Failed to upload image: ${error.message}`);
+
+  return data?.fullPath ?? '';
 };
 
 export const insertBlog = async (payload: BlogsInsertPayload) => {

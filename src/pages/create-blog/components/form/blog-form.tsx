@@ -12,7 +12,6 @@ import { useTagContext } from '@/context/tags/tag-context';
 import { Tag } from '@/supabase';
 import { useAtomValue } from 'jotai';
 import { BlogFormValues } from '@/pages/create-blog/components/form/types';
-import type { UploadFile } from 'antd/es/upload/interface';
 
 export const BlogForm: React.FC = () => {
   const user = useAtomValue(userAtom);
@@ -57,27 +56,21 @@ export const BlogForm: React.FC = () => {
   });
 
   const onFinish = (values: BlogFormValues) => {
-    if (!user.isLoggedIn) {
-      notification.warning({
-        message: 'Authentication Required',
-        description: 'Please log in to create a blog.',
-      });
-      navigate('/login');
-      return;
-    }
+    const imageFile = (
+      Array.isArray(values.imageFile) ? values.imageFile[0] : values.imageFile
+    )?.originFileObj;
 
-    mutate(values);
+    mutate({
+      ...values,
+      imageFile,
+    });
   };
 
-  const validateFile = (file: UploadFile) => {
-    const isImage = file.type?.startsWith('image/');
-    if (!isImage) {
-      notification.error({
-        message: 'Invalid File Type',
-        description: 'Only image files are allowed.',
-      });
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
     }
-    return isImage;
+    return e?.fileList;
   };
 
   return (
@@ -86,6 +79,9 @@ export const BlogForm: React.FC = () => {
       onFinish={onFinish}
       layout='vertical'
       className='w-full space-y-4 sm:w-4/5'
+      initialValues={{
+        tags_ids: [],
+      }}
     >
       <Form.Item
         label='Title (English)'
@@ -140,23 +136,23 @@ export const BlogForm: React.FC = () => {
       <Form.Item
         label='Image'
         name='imageFile'
-        // rules={[{ required: true, message: 'Please upload an image.' }]}
+        valuePropName='fileList'
+        getValueFromEvent={normFile}
+        rules={[{ required: true, message: 'Please upload an image.' }]}
       >
         <Upload
-          beforeUpload={validateFile}
+          name='image'
+          listType='picture'
           maxCount={1}
-          fileList={form.getFieldValue('imageFile') || []}
-          onChange={(info) => {
-            form.setFieldsValue({ imageFile: info.fileList });
-          }}
+          beforeUpload={() => false}
         >
-          <Button icon={<UploadOutlined />}>Upload Image</Button>
+          <Button icon={<UploadOutlined />}>Click to upload</Button>
         </Upload>
       </Form.Item>
 
       <Form.Item>
         <Button type='primary' htmlType='submit'>
-          Create Blog
+          Submit
         </Button>
       </Form.Item>
     </Form>

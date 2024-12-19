@@ -44,7 +44,7 @@ export const BlogForm: React.FC = () => {
       });
       queryClient.invalidateQueries({ queryKey: ['blogs'] });
       form.resetFields();
-      navigate('/dashboard');
+      navigate('/dashboard/blogs');
     },
     onError: (error: Error) => {
       console.error(error);

@@ -18,6 +18,7 @@ export const CreateUserForm: React.FC = () => {
         duration: 2,
       });
       navigate('/dashboard');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     },
     onError: () => {
       notification.error({
@@ -25,9 +26,6 @@ export const CreateUserForm: React.FC = () => {
         description: 'An error occurred while creating the user',
         duration: 2,
       });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
     },
   });
 

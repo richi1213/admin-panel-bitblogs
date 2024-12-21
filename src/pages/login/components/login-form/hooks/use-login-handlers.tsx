@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { userAtom } from '@/atoms';
 import { fetchUserProfile, supabase } from '@/supabase';
+import { DASHBOARD_LAYOUT_PATH } from '@/routes';
 
 type UseLoginHandlers = {
   handleLoginSuccess: () => Promise<void>;
@@ -54,7 +55,7 @@ const useLoginHandlers: () => UseLoginHandlers = () => {
             duration: 2,
           });
 
-          navigate('/dashboard');
+          navigate(DASHBOARD_LAYOUT_PATH.DASHBOARD);
         }
       } catch (err) {
         console.error('Error handling login:', err);

@@ -12,6 +12,7 @@ import { useTagContext } from '@/context/tags/tag-context';
 import { Tag } from '@/supabase';
 import { useAtomValue } from 'jotai';
 import { BlogFormValues } from '@/pages/create-blog/components/form/types';
+import { DASHBOARD_PATHS } from '@/routes';
 
 export const BlogForm: React.FC = () => {
   const user = useAtomValue(userAtom);
@@ -44,7 +45,7 @@ export const BlogForm: React.FC = () => {
       });
       queryClient.invalidateQueries({ queryKey: ['blogs'] });
       form.resetFields();
-      navigate('/dashboard/blogs');
+      navigate(DASHBOARD_PATHS.BLOGS);
     },
     onError: (error: Error) => {
       console.error(error);

@@ -1,4 +1,4 @@
 import { RouterProvider } from 'react-router-dom';
-import { router } from './routes';
+import { appRouter } from '@/routes';
 
-export const App: React.FC = () => <RouterProvider router={router} />;
+export const App: React.FC = () => <RouterProvider router={appRouter} />;

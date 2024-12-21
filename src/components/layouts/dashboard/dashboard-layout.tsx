@@ -1,4 +1,5 @@
 import { BlogProvider, TagProvider } from '@/context';
+import { DASHBOARD_PATHS } from '@/routes';
 import { Layout, Menu, theme } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
 
@@ -33,7 +34,9 @@ export const DashboardLayout: React.FC = () => {
                   },
                   {
                     key: 'users-1',
-                    label: <Link to='create-user'>Create User</Link>,
+                    label: (
+                      <Link to={DASHBOARD_PATHS.CREATE_USER}>Create User</Link>
+                    ),
                   },
                 ],
               },
@@ -43,11 +46,13 @@ export const DashboardLayout: React.FC = () => {
                 children: [
                   {
                     key: 'blogs-0',
-                    label: <Link to='blogs'>Blogs</Link>,
+                    label: <Link to={DASHBOARD_PATHS.BLOGS}>Blogs</Link>,
                   },
                   {
                     key: 'blogs-1',
-                    label: <Link to='create-blog'>Create Blog</Link>,
+                    label: (
+                      <Link to={DASHBOARD_PATHS.CREATE_BLOG}>Create Blog</Link>
+                    ),
                   },
                 ],
               },

@@ -3,41 +3,18 @@ import {
   createRoutesFromElements,
   Route,
 } from 'react-router-dom';
-import {
-  DefaultLayout,
-  AuthLayout,
-  DashboardLayout,
-} from '../components/layouts';
-import {
-  LoginPage,
-  UsersPage,
-  CreateUserPage,
-  BlogsPage,
-  NotFound,
-  CreateBlogPage,
-} from '@/pages';
+import { DefaultLayout } from '@/components/layouts';
+import { NotFound } from '@/pages';
 import { IsUnauthorizedGuard, IsAuthorizedGuard } from '@/routes/protected';
+import { AUTH_LAYOUT, DASHBOARD_LAYOUT } from '@/routes/layouts';
 
-export const router = createBrowserRouter(
+export const appRouter = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/' element={<DefaultLayout />}>
-        <Route element={<IsAuthorizedGuard />}>
-          <Route path='/' element={<AuthLayout />}>
-            <Route index element={<LoginPage />} />
-          </Route>
-        </Route>
-
-        <Route element={<IsUnauthorizedGuard />}>
-          <Route path='dashboard' element={<DashboardLayout />}>
-            <Route index element={<UsersPage />}></Route>
-            <Route path='create-user' element={<CreateUserPage />}></Route>
-            <Route path='blogs' element={<BlogsPage />}></Route>
-            <Route path='create-blog' element={<CreateBlogPage />}></Route>
-          </Route>
-        </Route>
+        <Route element={<IsAuthorizedGuard />}>{AUTH_LAYOUT}</Route>
+        <Route element={<IsUnauthorizedGuard />}>{DASHBOARD_LAYOUT}</Route>
       </Route>
-
       <Route path='*' element={<NotFound />} />
     </>,
   ),

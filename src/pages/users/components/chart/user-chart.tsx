@@ -1,9 +1,8 @@
 import { UserDrawer } from '@/pages/users/components/chart/drawer';
 import { UserInChart } from '@/pages/users/components/chart/types';
-import { fetchAllUsers } from '@/supabase';
-import { formatDate } from '@/utils';
+import { useGetUsers } from '@/pages/users/hooks/use-get-users';
+import { mapUsersForChart } from '@/pages/users/utils/map-users';
 import { EditOutlined } from '@ant-design/icons';
-import { useQuery } from '@tanstack/react-query';
 import { Table, Spin, Alert } from 'antd';
 import { useState } from 'react';
 
@@ -17,21 +16,9 @@ export const UsersChart: React.FC = () => {
     data: users,
     isLoading,
     isError,
-  } = useQuery({
-    queryKey: ['users'],
-    queryFn: fetchAllUsers,
-    staleTime: 10 * 60 * 1000,
+  } = useGetUsers({
+    queryOptions: { select: mapUsersForChart },
   });
-
-  const formattedUsers =
-    users?.map((user) => ({
-      id: user.id,
-      createdAt: formatDate(user.created_at),
-      fullNameEn: user.user_metadata?.full_name_en,
-      userName: user.user_metadata?.username,
-      email: user.email,
-      lastSignIn: formatDate(user.last_sign_in_at),
-    })) || [];
 
   if (isLoading) {
     return <Spin />;
@@ -53,7 +40,7 @@ export const UsersChart: React.FC = () => {
 
   return (
     <>
-      <Table dataSource={formattedUsers} rowKey='id'>
+      <Table dataSource={users} rowKey='id'>
         <Column<UserInChart>
           title='ID'
           dataIndex='id'

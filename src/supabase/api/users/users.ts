@@ -5,12 +5,11 @@ import {
 } from '@/supabase/api/users/types';
 import { supabase } from '@/supabase/auth-client';
 
-export const fetchAllUsers = async (): Promise<User[] | null> => {
+export const fetchAllUsers = async (): Promise<User[]> => {
   const { data, error } = await supabase.auth.admin.listUsers();
 
   if (error) {
     console.error('Error fetching users:', error.message);
-    return null;
   }
 
   const users = data?.users || [];

@@ -55,7 +55,7 @@ const useLoginHandlers: () => UseLoginHandlers = () => {
             duration: 2,
           });
 
-          navigate(DASHBOARD_LAYOUT_PATH.DASHBOARD);
+          navigate(`/${DASHBOARD_LAYOUT_PATH.DASHBOARD}`);
         }
       } catch (err) {
         console.error('Error handling login:', err);

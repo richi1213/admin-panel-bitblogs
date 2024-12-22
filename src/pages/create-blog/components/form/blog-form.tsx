@@ -12,7 +12,8 @@ import { useTagContext } from '@/context/tags/tag-context';
 import { Tag } from '@/supabase';
 import { useAtomValue } from 'jotai';
 import { BlogFormValues } from '@/pages/create-blog/components/form/types';
-import { DASHBOARD_PATHS } from '@/routes';
+import { DASHBOARD_LAYOUT_PATH, DASHBOARD_PATHS } from '@/routes';
+import { BLOG_QUERY_KEYS } from '@/context';
 
 export const BlogForm: React.FC = () => {
   const user = useAtomValue(userAtom);
@@ -43,9 +44,9 @@ export const BlogForm: React.FC = () => {
         message: 'Blog Created',
         description: 'You have successfully posted your blog!',
       });
-      queryClient.invalidateQueries({ queryKey: ['blogs'] });
+      queryClient.invalidateQueries({ queryKey: [BLOG_QUERY_KEYS.BLOGS] });
       form.resetFields();
-      navigate(DASHBOARD_PATHS.BLOGS);
+      navigate(`/${DASHBOARD_LAYOUT_PATH.DASHBOARD}/${DASHBOARD_PATHS.BLOGS}`);
     },
     onError: (error: Error) => {
       console.error(error);

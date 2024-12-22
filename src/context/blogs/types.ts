@@ -1,4 +1,4 @@
-import { Blog } from '@/pages/home/components/blog-card-wrapper/blog-card/blog-card.types';
+import { Blog } from '@/pages/blogs/components/blog-cards';
 
 export type BlogContextType = {
   blogs: Blog[] | null | undefined;

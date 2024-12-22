@@ -4,6 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createUser } from '@/supabase';
 import { CreateUserPayload } from '@/supabase/api/users/types';
 import { useNavigate } from 'react-router-dom';
+import { USERS_QUERY_KEYS } from '@/pages/users';
+import { DASHBOARD_LAYOUT_PATH } from '@/routes';
 
 export const CreateUserForm: React.FC = () => {
   const queryClient = useQueryClient();
@@ -17,8 +19,8 @@ export const CreateUserForm: React.FC = () => {
         message: 'User created successfully!',
         duration: 2,
       });
-      navigate('/dashboard');
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      navigate(`/${DASHBOARD_LAYOUT_PATH.DASHBOARD}`);
+      queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEYS.USERS] });
     },
     onError: () => {
       notification.error({

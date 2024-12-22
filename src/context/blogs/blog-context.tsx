@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchBlogs, searchBlogs } from '@/supabase/api/blogs';
 import { BlogContextType } from '@/context/blogs/types';
+import { BLOG_QUERY_KEYS } from '@/context/blogs/enums';
 const BlogContext = createContext<BlogContextType | undefined>(undefined);
 
 export const BlogProvider: React.FC<React.PropsWithChildren> = ({
@@ -15,7 +16,7 @@ export const BlogProvider: React.FC<React.PropsWithChildren> = ({
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['blogs', { searchText, selectedTagIds }],
+    queryKey: [BLOG_QUERY_KEYS.BLOGS, { searchText, selectedTagIds }],
     queryFn: ({ queryKey }) => {
       const [, { searchText, selectedTagIds }] = queryKey as [
         string,

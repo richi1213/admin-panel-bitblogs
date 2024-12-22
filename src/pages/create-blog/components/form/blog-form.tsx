@@ -1,61 +1,19 @@
-import { Button, Form, Input, Upload, notification, Select } from 'antd';
+import { Button, Form, Input, Upload, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import {
-  BlogsInsertPayload,
-  insertBlog,
-  uploadImage,
-} from '@/supabase/api/blogs';
-import { userAtom } from '@/atoms';
 import { useTagContext } from '@/context/tags/tag-context';
 import { Tag } from '@/supabase';
-import { useAtomValue } from 'jotai';
 import { BlogFormValues } from '@/pages/create-blog/components/form/types';
-import { DASHBOARD_LAYOUT_PATH, DASHBOARD_PATHS } from '@/routes';
-import { BLOG_QUERY_KEYS } from '@/context';
+import { useCreateBlog } from '@/pages/create-blog/hooks';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/atoms';
 
 export const BlogForm: React.FC = () => {
   const user = useAtomValue(userAtom);
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const { tags } = useTagContext();
 
   const [form] = Form.useForm<BlogFormValues>();
 
-  const { mutate } = useMutation({
-    mutationFn: async (formValues: BlogFormValues) => {
-      if (formValues.imageFile) {
-        const imageUrl = await uploadImage(formValues.imageFile);
-        const insertBlogPayload: BlogsInsertPayload = {
-          title_en: formValues.titleEn,
-          title_ka: formValues.titleKa,
-          description_en: formValues.descriptionEn,
-          description_ka: formValues.descriptionKa,
-          image_url: imageUrl || '',
-          user_id: user.userInfo?.id,
-          tag_ids: formValues.tags_ids,
-        };
-        return await insertBlog(insertBlogPayload);
-      }
-    },
-    onSuccess: () => {
-      notification.success({
-        message: 'Blog Created',
-        description: 'You have successfully posted your blog!',
-      });
-      queryClient.invalidateQueries({ queryKey: [BLOG_QUERY_KEYS.BLOGS] });
-      form.resetFields();
-      navigate(`/${DASHBOARD_LAYOUT_PATH.DASHBOARD}/${DASHBOARD_PATHS.BLOGS}`);
-    },
-    onError: (error: Error) => {
-      console.error(error);
-      notification.error({
-        message: 'Error',
-        description: error.message || 'Failed to create blog.',
-      });
-    },
-  });
+  const { mutate } = useCreateBlog();
 
   const onFinish = (values: BlogFormValues) => {
     const imageFile = (
@@ -65,7 +23,10 @@ export const BlogForm: React.FC = () => {
     mutate({
       ...values,
       imageFile,
+      userId: user.userInfo?.id,
     });
+
+    console.log(values);
   };
 
   const normFile = (e: any) => {

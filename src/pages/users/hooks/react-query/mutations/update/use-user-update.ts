@@ -1,34 +1,31 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import {
-  fetchUserById,
   updateUserEmail,
   updateUserFullNameEn,
   updateUserFullNameKa,
   updateUserUsername,
-  deleteUser,
 } from '@/supabase';
+import {
+  USER_QUERY_KEYS,
+  USERS_QUERY_KEYS,
+} from '@/pages/users/hooks/react-query/queries';
 
-export const useUserData = (userId: string) => {
+export const useUserUpdate = (userId: string) => {
   const queryClient = useQueryClient();
 
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['user', userId],
-    queryFn: () => fetchUserById(userId),
-    staleTime: 2 * 60 * 1000,
-    enabled: !!userId,
-  });
-
   const { mutate: updateEmail } = useMutation({
-    mutationKey: ['user', userId],
+    mutationKey: [USER_QUERY_KEYS.USER, userId],
     mutationFn: (newField: string) => updateUserEmail({ userId, newField }),
     onSuccess: () => {
       notification.success({
         message: 'Email updated successfully!',
         duration: 2,
       });
-      queryClient.invalidateQueries({ queryKey: ['user', userId] });
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({
+        queryKey: [USER_QUERY_KEYS.USER, userId],
+      });
+      queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEYS.USERS] });
     },
     onError: () =>
       notification.error({
@@ -39,7 +36,7 @@ export const useUserData = (userId: string) => {
   });
 
   const { mutate: updateFullNameEn } = useMutation({
-    mutationKey: ['user', userId],
+    mutationKey: [USER_QUERY_KEYS.USER, userId],
     mutationFn: (newField: string) =>
       updateUserFullNameEn({ userId, newField }),
     onSuccess: () => {
@@ -47,8 +44,10 @@ export const useUserData = (userId: string) => {
         message: 'Full name en updated successfully!',
         duration: 2,
       });
-      queryClient.invalidateQueries({ queryKey: ['user', userId] });
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({
+        queryKey: [USER_QUERY_KEYS.USER, userId],
+      });
+      queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEYS.USERS] });
     },
     onError: () =>
       notification.error({
@@ -59,16 +58,18 @@ export const useUserData = (userId: string) => {
   });
 
   const { mutate: updateFullNameKa } = useMutation({
-    mutationKey: ['user', userId],
+    mutationKey: [USER_QUERY_KEYS.USER, userId],
     mutationFn: (newField: string) =>
       updateUserFullNameKa({ userId, newField }),
     onSuccess: () => {
       notification.success({
         message: 'Full name ka updated successfully!',
         duration: 2,
-      }),
-        queryClient.invalidateQueries({ queryKey: ['user', userId] });
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      });
+      queryClient.invalidateQueries({
+        queryKey: [USER_QUERY_KEYS.USER, userId],
+      });
+      queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEYS.USERS] });
     },
     onError: () =>
       notification.error({
@@ -79,15 +80,17 @@ export const useUserData = (userId: string) => {
   });
 
   const { mutate: updateUsername } = useMutation({
-    mutationKey: ['user', userId],
+    mutationKey: [USER_QUERY_KEYS.USER, userId],
     mutationFn: (newField: string) => updateUserUsername({ userId, newField }),
     onSuccess: () => {
       notification.success({
         message: 'Username updated successfully!',
         duration: 2,
       });
-      queryClient.invalidateQueries({ queryKey: ['user', userId] });
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({
+        queryKey: [USER_QUERY_KEYS.USER, userId],
+      });
+      queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEYS.USERS] });
     },
     onError: () =>
       notification.error({
@@ -97,32 +100,10 @@ export const useUserData = (userId: string) => {
       }),
   });
 
-  const { mutate: deleteUserById } = useMutation({
-    mutationKey: ['deleteUser', userId],
-    mutationFn: () => deleteUser(userId),
-    onSuccess: () => {
-      notification.success({
-        message: 'User deleted successfully!',
-        duration: 2,
-      });
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-    },
-    onError: () => {
-      notification.error({
-        message: 'Error deleting user',
-        description: 'An error occurred while deleting the user',
-        duration: 2,
-      });
-    },
-  });
-
   return {
-    user,
-    isLoading,
     updateEmail,
     updateFullNameEn,
     updateFullNameKa,
     updateUsername,
-    deleteUserById,
   };
 };

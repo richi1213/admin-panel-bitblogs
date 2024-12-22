@@ -1,7 +1,7 @@
 import { UserDrawer } from '@/pages/users/components/chart/drawer';
 import { UserInChart } from '@/pages/users/components/chart/types';
-import { useGetUsers } from '@/pages/users/hooks/use-get-users';
-import { mapUsersForChart } from '@/pages/users/utils/map-users';
+import { useGetUsers } from '@/pages/users/hooks';
+import { mapUsersForChart } from '@/pages/users/utils';
 import { EditOutlined } from '@ant-design/icons';
 import { Table, Spin, Alert } from 'antd';
 import { useState } from 'react';
@@ -86,7 +86,6 @@ export const UsersChart: React.FC = () => {
           )}
         />
       </Table>
-
       <UserDrawer
         open={drawerVisible}
         userId={currentUserId as string}

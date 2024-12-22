@@ -17,12 +17,11 @@ export const fetchAllUsers = async (): Promise<User[]> => {
   return users as User[];
 };
 
-export const fetchUserById = async (userId: string): Promise<User | null> => {
+export const fetchUserById = async (userId: string): Promise<User> => {
   const { data, error } = await supabase.auth.admin.getUserById(userId);
 
   if (error) {
     console.error('Error fetching user:', error.message);
-    return null;
   }
 
   const user = data?.user;

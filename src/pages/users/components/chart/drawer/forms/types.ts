@@ -1,5 +1,5 @@
 export type EditableFormFieldProps = {
   fieldName: string;
-  initialValue: string;
+  initialValue: string | undefined;
   onSubmit: (fieldName: string, value: string) => void;
 };

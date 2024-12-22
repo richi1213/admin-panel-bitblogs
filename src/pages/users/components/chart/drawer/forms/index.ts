@@ -1,2 +1,2 @@
-export * from './editable-form-field.tsx';
-export * from './types.ts';
+export * from './editable-form-field';
+export * from './types';

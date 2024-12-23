@@ -25,8 +25,6 @@ const useLoginHandlers: () => UseLoginHandlers = () => {
         if (user) {
           const profile = await fetchUserProfile(user.id);
 
-          console.log('Logged in user:', user);
-
           if (!profile) {
             notification.error({
               message: 'Error',

@@ -4,11 +4,7 @@ import { useTagContext } from '@/context/tags/tag-context';
 import { Tag } from '@/supabase';
 import { BlogFormValues } from '@/pages/create-blog/components/form/types';
 import { useCreateBlog } from '@/pages/create-blog/hooks';
-import { useAtomValue } from 'jotai';
-import { userAtom } from '@/atoms';
-
 export const BlogForm: React.FC = () => {
-  const user = useAtomValue(userAtom);
   const { tags } = useTagContext();
 
   const [form] = Form.useForm<BlogFormValues>();
@@ -23,10 +19,7 @@ export const BlogForm: React.FC = () => {
     mutate({
       ...values,
       imageFile,
-      userId: user.userInfo?.id,
     });
-
-    console.log(values);
   };
 
   const normFile = (e: any) => {

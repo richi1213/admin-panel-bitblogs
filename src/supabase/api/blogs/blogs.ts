@@ -1,4 +1,4 @@
-import { BlogRow, BlogsInsertPayload } from '@/supabase/api/blogs/types';
+import type { BlogRow, BlogsInsertPayload } from '@/supabase';
 import { supabase } from '@/supabase/auth-client';
 
 export const uploadImage = async (

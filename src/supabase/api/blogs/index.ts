@@ -1,2 +1,2 @@
 export * from './blogs';
-export * from './types';
+export type { BlogRow, BlogsInsertPayload } from './types';
